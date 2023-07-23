@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DetailComponent, PleaseSelectComponent } from './app.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: '', component: PleaseSelectComponent, children: [] },
+  { path:'detail', component:DetailComponent,children:[]}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

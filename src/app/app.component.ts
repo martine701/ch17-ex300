@@ -1,32 +1,53 @@
+
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CustomerService } from './customerService';
+import { Customer } from './customer';
+
+@Component({
+  selector: 'pleaseSelect',
+  template: `
+  <div>
+    <h2>Please make a selection.</h2>
+  </div>
+  `,
+  styles: ['div { background-color: #FFFFFF; padding: 10px; border: 1px solid #000000 }']
+})
+export class PleaseSelectComponent { }
+
+@Component({
+  selector: 'detail',
+  template: `
+  <div>
+    <h2>Customer Detail {{customer.id}}</h2>
+    <p>{{customer.name}}<p>
+      <p>{{customer.city}}, {{customer.state}}</p>
+      <p>Balance: &#36;{{customer.balance}}</p>
+    </div>    `,
+  styles: ['div { background-color: #FFE4E1 }']
+})
+export class DetailComponent {
+  customer: any;
+  constructor(private customerService: CustomerService, private route: ActivatedRoute)
+  {
+    route.queryParams.subscribe(
+      (queryParams: any) => this.customer = customerService.getCustomerById(queryParams['id']));
+  }
+}
 
 @Component({
   selector: 'app-root',
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    <router-outlet></router-outlet>
+    <div>
+      <h1>        Customer List      </h1>
+      <p *ngFor="let customer of _customerService.customers">
+        <a [routerLink]="['detail']" [queryParams]="{id: customer.id}" routerLinkActive="active">{{customer.name}}</a>
+        </p>
+        </div>
+        <router-outlet></router-outlet>
   `,
-  styles: []
+  styles: ['div { background-color: #faebd7 }',]
 })
-export class AppComponent {
-  title = 'ch17-ex300';
+export class AppComponent{
+constructor(public _customerService:CustomerService){}
 }
